@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women's Collection - Clothing Store</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="newsletter.css">
+    <style>
+        /* Hero Section */
+        #page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("img/banner/b2.jpg");
+            background-size: cover;
+            background-position: center;
+            padding: 120px 40px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+
+        #page-header h2 {
+            font-size: 46px;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        #page-header p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .filters-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #088178;
+        }
+
+        .sort-by {
+            margin-left: auto;
+        }
+
+        /* Products Grid */
+        .pro-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pro {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pro:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .pro img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .pro:hover img {
+            transform: scale(1.05);
+        }
+
+        .pro .des {
+            padding: 15px 0;
+        }
+
+        .pro .des h5 {
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .pro .des .star {
+            color: #FFD700;
+            margin-bottom: 8px;
+        }
+
+        .pro .des h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #088178;
+            margin-bottom: 15px;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .size-btn {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .size-btn:hover {
+            border-color: #088178;
+            color: #088178;
+        }
+
+        .size-btn.selected {
+            background: #088178;
+            color: white;
+            border-color: #088178;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: #088178;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart i {
+            font-size: 16px;
+        }
+
+        .add-to-cart:hover {
+            background: #066661;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #088178;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Pagination */
+        #pagination {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        #pagination a {
+            text-decoration: none;
+            background: white;
+            padding: 12px 18px;
+            border-radius: 4px;
+            color: #088178;
+            font-weight: 600;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+            border: 1px solid #088178;
+        }
+
+        #pagination a.active {
+            background: #088178;
+            color: white;
+        }
+
+        #pagination a:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #page-header {
+                padding: 80px 20px;
+            }
+
+            #page-header h2 {
+                font-size: 36px;
+            }
+
+            #page-header p {
+                font-size: 16px;
+            }
+
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group select {
+                width: 100%;
+            }
+
+            .sort-by {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .pro-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/product/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="men.html">Men</a></li>
+                <li><a class="active" href="women.html">Women</a></li>
+                <li><a href="kids.html">Kids</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="login-nav"><a href="login.html">Login</a>
+                    <div class="create-account-popup">
+                        <a href="register.html">Create Account</a>
+                    </div>
+                </li>
+                <li id="lg-bag">
+                    <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+                    <span id="cart-count" class="cart-count">0</span>
+                </li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <li><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="page-header">
+        <h2>Women's Collection</h2>
+        <p>Save more with coupons & up to 70% off!</p>
+    </section>
+
+    <section class="filters-section">
+        <div class="filters-container">
+            <div class="filter-group">
+                <label>Size:</label>
+                <select id="sizeFilter">
+                    <option value="">All Sizes</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Price:</label>
+                <select id="priceFilter">
+                    <option value="">All Prices</option>
+                    <option value="0-50">Under $50</option>
+                    <option value="50-100">$50 - $100</option>
+                    <option value="100-200">$100 - $200</option>
+                    <option value="200+">$200+</option>
+                </select>
+            </div>
+            <div class="filter-group sort-by">
+                <label>Sort By:</label>
+                <select id="sortBy">
+                    <option value="newest">Newest</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <section id="product1" class="section-p1">
+        <div class="pro-container">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pagination" class="section-p1">
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#"><i class="fal fa-long-arrow-alt-right"></i></a>
+    </section>
+
+    <section id="newsletter">
+        <div class="newtext">
+            <h4>Join Our Community</h4>
+            <p>Be part of our fashion family and enjoy <span>exclusive benefits</span></p>
+        </div>
+        <div class="newsletter-cta">
+            <a href="register.html" class="signup-btn">Create Account</a>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="img/product/logo.png" alt="">
+            <h4>Contact</h4>
+            <p><strong>Address: </strong>Port Said Street, Naga Hammadi City, Qena Governorate</p>
+            <p><strong>Phone: </strong> (+20) 01281925975 / (+20) 01559886232 </p>
+            <p><strong>Hours </strong>10:00 - 18:00 , Mon - Sat</p>
+           
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About Us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign In</a>
+            <a href="#">View Cart</a>
+            <a href="#">Help</a>
+        </div>
+        <div class="copyright">
+            <p>© 2024, Fashion Store - Modern Fashion Shopping</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="product-service.js"></script>
+    <script src="cart-service.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let currentProducts = [];
+        let selectedSize = '';
+        const itemsPerPage = 12;
+        let currentPage = 1;
+
+        // Filter and sort functions
+        function filterProducts() {
+            const sizeFilter = document.getElementById('sizeFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            let filtered = [...currentProducts];
+
+            // Apply size filter
+            if (sizeFilter) {
+                filtered = filtered.filter(product => 
+                    product.sizes.includes(sizeFilter)
+                );
+            }
+
+            // Apply price filter
+            if (priceFilter) {
+                const [min, max] = priceFilter.split('-').map(Number);
+                filtered = filtered.filter(product => {
+                    if (max) {
+                        return product.price >= min && product.price <= max;
+                    } else {
+                        return product.price >= min;
+                    }
+                });
+            }
+
+            // Apply sorting
+            switch (sortBy) {
+                case 'price-low':
+                    filtered.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filtered.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filtered.sort((a, b) => a.productName.localeCompare(b.productName));
+                    break;
+                case 'newest':
+                    filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    break;
+            }
+
+            return filtered;
+        }
+
+        function displayProducts(products) {
+            const container = document.querySelector('.pro-container');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedProducts = products.slice(start, end);
+
+            container.innerHTML = paginatedProducts.map(product => `
+                <div class="pro" onclick="window.location.href='product-detail.html?id=${product.productId}'">
+                    <img src="${product.imagePath}" alt="${product.productName}">
+                    <div class="des">
+                        <h5>${product.productName}</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>$${product.price.toFixed(2)}</h4>
+                        <div class="size-options">
+                            ${['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => `
+                                <button class="size-btn ${selectedSize === size ? 'selected' : ''}"
+                                        onclick="event.stopPropagation(); selectSize('${size}', ${product.productId})">
+                                    ${size}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); quickAddToCart(${product.productId})">
+                        <i class="far fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                </div>
+            `).join('');
+
+            updatePagination(products.length);
+        }
+
+        function updatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            let paginationHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `
+                    <a href="#" class="${i === currentPage ? 'active' : ''}" 
+                       onclick="changePage(${i}); return false;">
+                        ${i}
+                    </a>
+                `;
+            }
+            
+            if (currentPage < totalPages) {
+                paginationHtml += `
+                    <a href="#" onclick="changePage(${currentPage + 1}); return false;">
+                        <i class="fal fa-long-arrow-alt-right"></i>
+                    </a>
+                `;
+            }
+            
+            pagination.innerHTML = paginationHtml;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            displayProducts(filterProducts());
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectSize(size, productId) {
+            selectedSize = size;
+            // Update UI to show selected size
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                if (btn.textContent.trim() === size && 
+                    btn.closest('.pro').querySelector('.add-to-cart').getAttribute('onclick').includes(productId)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+        async function quickAddToCart(productId) {
+            try {
+                if (!selectedSize) {
+                    showNotification('Please select a size first', 'error');
+                    return;
+                }
+
+                await cartService.addToCart(productId, 1, selectedSize);
+                showNotification('Product added to cart!');
+                selectedSize = ''; // Reset size selection
+                
+                // Update UI to reflect size deselection
+                document.querySelectorAll('.size-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+            } catch (error) {
+                if (error.message === 'Please login first') {
+                    window.location.href = 'login.html';
+                } else {
+                    showNotification(error.message, 'error');
+                }
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+                color: white;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+                animation: fadeIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Event listeners for filters
+        document.getElementById('sizeFilter').addEventListener('change', () => {
+            currentPage = 1;
+            displayProducts(filterProducts());
+        });
+
+        document.getElementById('priceFilter').addEventListener('change', () => {
+            currentPage = 1;
+            displayProducts(filterProducts());
+        });
+
+        document.getElementById('sortBy').addEventListener('change', () => {
+            currentPage = 1;
+            displayProducts(filterProducts());
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const productService = new ProductService();
+                currentProducts = await productService.getProductsByCategory(7); // Women's category
+                
+                if (currentProducts && currentProducts.length > 0) {
+                    displayProducts(currentProducts);
+                } else {
+                    document.querySelector('.pro-container').innerHTML = `
+                        <div style="text-align: center; padding: 40px;">
+                            <p>No products available in this category.</p>
+                        </div>
+                    `;
+                }
+
+                if (typeof checkAuth === 'function') {
+                    checkAuth();
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.querySelector('.pro-container').innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <p>Failed to load products. Please try again later.</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

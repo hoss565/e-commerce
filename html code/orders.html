@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Clothing Store</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="navbar-user-menu.css">
+    <style>
+        .orders-container {
+            padding: 40px 80px;
+            min-height: 60vh;
+            background-color: #f8f9fa;
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .orders-header h2 {
+            color: #1a1a1a;
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .orders-header h2 i {
+            color: #088178;
+            font-size: 24px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .order-id {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .detail-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .order-items {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .order-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .item-meta {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #088178;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge i {
+            font-size: 12px;
+        }
+
+        .status-badge:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .orders-container {
+                padding: 20px;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/product/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="men.html">Men</a></li>
+                <li><a href="women.html">Women</a></li>
+                <li><a href="kids.html">Kids</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="login-nav">
+                    <a href="profile.html">Username</a>
+                    <div class="user-menu">
+                        <a href="orders.html">My Orders</a>
+                        <a href="logout.html">Logout</a>
+                    </div>
+                </li>
+                <li id="lg-bag">
+                    <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+                    <span id="cart-count" class="cart-count">0</span>
+                </li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <div class="orders-container">
+        <div class="orders-header">
+            <h2><i class="far fa-clipboard-list"></i> My Orders</h2>
+        </div>
+
+        <div id="orders-list">
+            <!-- Orders will be loaded here -->
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="cart-service.js"></script>
+    <script src="order-service.js"></script>
+    <script>
+        async function loadOrders() {
+            try {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (!currentUser || !currentUser.user || !currentUser.user.userId) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const orders = await orderService.getUserOrders(currentUser.user.userId);
+                const ordersList = document.getElementById('orders-list');
+                
+                if (orders.length === 0) {
+                    ordersList.innerHTML = `
+                        <div style="text-align: center; padding: 40px;">
+                            <i class="far fa-shopping-bag" style="font-size: 64px; color: #088178; margin-bottom: 20px;"></i>
+                            <h2 style="color: #1a1a1a; margin-bottom: 15px;">No Orders Yet</h2>
+                            <p style="color: #666; margin-bottom: 30px;">Start shopping to see your orders here!</p>
+                            <a href="index.html" class="normal" style="background: #088178; color: white; padding: 15px 30px; border-radius: 30px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="far fa-shopping-bag"></i>
+                                Start Shopping
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                ordersList.innerHTML = orders.map(order => `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-id">Order #${order.orderId}</span>
+                            <span class="order-date">${orderService.formatDate(order.createdAt)}</span>
+                        </div>
+                        <div class="order-details">
+                            <div class="detail-group">
+                                <span class="detail-label">Status</span>
+                                <span class="status-badge" style="background: ${orderService.getStatusColor(order.status)}20; color: ${orderService.getStatusColor(order.status)}">
+                                    <i class="fas fa-circle"></i>
+                                    ${order.status}
+                                </span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Subtotal</span>
+                                <span class="detail-value">${orderService.formatCurrency(order.subTotal)}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Shipping Cost</span>
+                                <span class="detail-value">${orderService.formatCurrency(order.shippingCost)}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Total Amount</span>
+                                <span class="detail-value" style="font-size: 16px; color: #088178;">${orderService.formatCurrency(order.total)}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Payment Method</span>
+                                <span class="detail-value">${order.paymentMethod}</span>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Payment Status</span>
+                                <span class="status-badge" style="background: ${orderService.getPaymentStatusColor(order.paymentStatus)}20; color: ${orderService.getPaymentStatusColor(order.paymentStatus)}">
+                                    <i class="fas fa-circle"></i>
+                                    ${order.paymentStatus}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                            <h4 style="color: #1a1a1a; margin-bottom: 10px;">Order Items</h4>
+                            ${order.orderDetails.map(detail => `
+                                <div class="order-item">
+                                    <img src="${orderService.getImagePath(detail.imagePath)}" alt="${detail.productName}">
+                                    <div class="item-details">
+                                        <p class="item-name">${detail.productName}</p>
+                                        <p class="item-meta">Size: ${detail.size} | Qty: ${detail.quantity} | Price: ${orderService.formatCurrency(detail.price)}</p>
+                                    </div>
+                                    <span class="item-price">${orderService.formatCurrency(detail.subTotal)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('orders-list').innerHTML = `<div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 64px; color: red; margin-bottom: 20px;"></i>
+                    <h2 style="color: #1a1a1a;">Error Loading Orders</h2>
+                    <p style="color: #666;">${error.message}</p>
+                </div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+</html>

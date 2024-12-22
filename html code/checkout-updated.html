@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Clothing Store</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="navbar-user-menu.css">
+    <link rel="stylesheet" href="checkout-styles.css">
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/product/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="men.html">Men</a></li>
+                <li><a href="women.html">Women</a></li>
+                <li><a href="kids.html">Kids</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="login-nav"></li>
+                <li id="lg-bag">
+                    <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+                    <span id="cart-count" class="cart-count">0</span>
+                </li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <h2><i class="far fa-credit-card"></i> Checkout</h2>
+        </div>
+
+        <div class="checkout-grid">
+            <div class="shipping-form">
+                <h3><i class="far fa-shipping-fast"></i> Shipping Address</h3>
+                <form id="shippingForm" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="streetAddress">Street Address</label>
+                        <input type="text" id="streetAddress" name="streetAddress" required>
+                        <div class="error-message">Please enter your street address</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required>
+                            <div class="error-message">Please enter your city</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" required>
+                            <div class="error-message">Please enter your state</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postalCode">Postal Code</label>
+                            <input type="text" id="postalCode" name="postalCode" required>
+                            <div class="error-message">Please enter your postal code</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" name="country" required>
+                            <div class="error-message">Please enter your country</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <div class="error-message">Please enter your phone number</div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="order-summary">
+                <h3><i class="far fa-receipt"></i> Order Summary</h3>
+                <div id="orderSummaryContent">
+                    <!-- Order summary will be loaded here -->
+                </div>
+                <div class="payment-method">
+                    <h4>Payment Method</h4>
+                    <div class="payment-option">
+                        <i class="far fa-money-bill-alt"></i>
+                        <div class="payment-option-text">
+                            <h5>Cash on Delivery</h5>
+                            <p>Pay when you receive your order</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="place-order-btn" onclick="placeOrder()">
+                    <i class="far fa-check-circle"></i>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="cart-service.js"></script>
+    <script src="checkout-service.js"></script>
+    <script>
+        let cartData = null;
+        let orderSummary = null;
+
+        async function loadOrderSummary() {
+            try {
+                cartData = await cartService.getCart();
+                orderSummary = await cartService.getCartSummary();
+                
+                const summaryContent = document.getElementById('orderSummaryContent');
+                let itemsHtml = cartData.items.map(item => `
+                    <div class="summary-item">
+                        <img src="${item.imagePath}" alt="${item.productName}" 
+                             onerror="this.onerror=null; this.src='img/product/f1.jpg';">
+                        <div class="summary-item-details">
+                            <div class="summary-item-name">${item.productName}</div>
+                            <div class="summary-item-meta">
+                                Size: ${item.size} | Quantity: ${item.quantity}
+                            </div>
+                        </div>
+                        <div class="summary-item-price">
+                            ${cartService.formatCurrency(item.price * item.quantity)}
+                        </div>
+                    </div>
+                `).join('');
+
+                summaryContent.innerHTML = `
+                    ${itemsHtml}
+                    <div class="summary-row" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <span>Subtotal</span>
+                        <span>${cartService.formatCurrency(orderSummary.subtotal)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>${cartService.formatCurrency(orderSummary.shippingCost)}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total to Pay on Delivery</span>
+                        <span>${cartService.formatCurrency(orderSummary.total)}</span>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading order summary:', error);
+                window.location.href = 'cart.html';
+            }
+        }
+
+        async function placeOrder() {
+            const form = document.getElementById('shippingForm');
+            const { isValid, errors } = checkoutService.validateShippingForm(form);
+
+            if (!isValid) {
+                checkoutService.showFormErrors(form, errors);
+                return;
+            }
+
+            const userId = cartService.getCurrentUserId();
+
+            try {
+                // Save shipping address
+                const shippingAddressResponse = await fetch('http://localhost:5037/api/ShippingAddresses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('userToken')}`
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        streetAddress: form.streetAddress.value,
+                        city: form.city.value,
+                        state: form.state.value,
+                        postalCode: form.postalCode.value,
+                        country: form.country.value,
+                        phone: form.phone.value,
+                        isDefault: true
+                    })
+                });
+
+                if (!shippingAddressResponse.ok) {
+                    throw new Error('Failed to save shipping address');
+                }
+
+                const shippingAddress = await shippingAddressResponse.json();
+
+                // Create order
+                const orderResponse = await fetch('http://localhost:5037/api/Orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('userToken')}`
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        shippingAddressId: shippingAddress.shippingAddressId,
+                        subTotal: orderSummary.subtotal,
+                        shippingCost: orderSummary.shippingCost,
+                        total: orderSummary.total,
+                        status: 'Pending',
+                        paymentMethod: 'CashOnDelivery',
+                        paymentStatus: 'Pending',
+                        orderDetails: cartData.items.map(item => ({
+                            productId: item.productId,
+                            size: item.size,
+                            quantity: item.quantity,
+                            price: item.price,
+                            subTotal: item.price * item.quantity
+                        }))
+                    })
+                });
+
+                if (!orderResponse.ok) {
+                    throw new Error('Failed to create order');
+                }
+
+                // Clear cart after successful order
+                await cartService.clearCart();
+
+                // Show success message
+                const successHtml = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="far fa-check-circle" style="font-size: 64px; color: #088178; margin-bottom: 20px;"></i>
+                        <h2 style="color: #1a1a1a; margin-bottom: 15px;">Order Placed Successfully!</h2>
+                        <p style="color: #666; margin-bottom: 30px;">Thank you for your purchase. Your order will be delivered soon.</p>
+                        <a href="index.html" class="normal" style="background: #088178; color: white; padding: 15px 30px; border-radius: 30px; text-decoration: none;">
+                            Continue Shopping
+                        </a>
+                    </div>
+                `;
+                document.querySelector('.checkout-container').innerHTML = successHtml;
+
+            } catch (error) {
+                console.error('Error placing order:', error);
+                alert('Error placing order. Please try again.');
+            }
+        }
+
+        // Load order summary when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!cartService.isUserLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadOrderSummary();
+        });
+    </script>
+</body>
+</html>

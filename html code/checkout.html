@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout - Clothing Store</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="navbar-user-menu.css">
+    <style>
+        .checkout-container {
+            padding: 40px 80px;
+            min-height: 60vh;
+            background-color: #f8f9fa;
+        }
+
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .checkout-header h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .checkout-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            max-width: 120px;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-icon {
+            background: #088178;
+            border-color: #088178;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(8, 129, 120, 0.2);
+        }
+
+        .step.completed .step-icon {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: #088178;
+            font-weight: 600;
+        }
+
+        .step.completed .step-label {
+            color: #4CAF50;
+        }
+
+        .shipping-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .form-section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-section-header i {
+            color: #088178;
+            font-size: 24px;
+        }
+
+        .form-section-header h3 {
+            color: #1a1a1a;
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            border-color: #088178;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(8, 129, 120, 0.1);
+        }
+
+        .alert-error {
+            background: #fff0f0;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-method {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f0f9f9;
+            border-radius: 10px;
+            border: 2px solid #088178;
+        }
+
+        .payment-method h4 {
+            color: #1a1a1a;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .payment-option i {
+            color: #088178;
+            font-size: 24px;
+            background: #f0f9f9;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .payment-option-text h5 {
+            color: #1a1a1a;
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .payment-option-text p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 18px;
+            background: #088178;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .place-order-btn:hover {
+            background: #066661;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(8, 129, 120, 0.2);
+        }
+
+        .place-order-btn:disabled {
+            background: #a8a8a8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .alert-error i {
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-steps {
+                flex-direction: column;
+                gap: 20px;
+                padding: 0;
+            }
+
+            .checkout-steps::before {
+                display: none;
+            }
+
+            .step {
+                flex-direction: row;
+                max-width: 100%;
+                width: 100%;
+                justify-content: flex-start;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 8px;
+            }
+
+            .step-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .step-label {
+                text-align: left;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/product/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="men.html">Men</a></li>
+                <li><a href="women.html">Women</a></li>
+                <li><a href="kids.html">Kids</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="login-nav">
+                    <a href="profile.html">Username</a>
+                    <div class="user-menu">
+                        <a href="orders.html">My Orders</a>
+                        <a href="logout.html">Logout</a>
+                    </div>
+                </li>
+                <li id="lg-bag">
+                    <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+                    <span id="cart-count" class="cart-count">0</span>
+                </li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <h1>Secure Checkout</h1>
+            <div class="checkout-steps">
+                <div class="step completed">
+                    <div class="step-icon">
+                        <i class="far fa-shopping-cart"></i>
+                    </div>
+                    <div class="step-label">Cart</div>
+                </div>
+                <div class="step active">
+                    <div class="step-icon">
+                        <i class="far fa-map-marker-alt"></i>
+                    </div>
+                    <div class="step-label">Shipping</div>
+                </div>
+               
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="far fa-check-circle"></i>
+                    </div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shipping-form">
+            <div class="form-section">
+                <div class="form-section-header">
+                    <i class="far fa-shipping-fast"></i>
+                    <h3>Shipping Address</h3>
+                </div>
+                <form id="shippingForm" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" required 
+                               placeholder="e.g., 01234567890"
+                               maxlength="11"
+                               pattern="^01[0125][0-9]{8}$"
+                               title="Please enter a valid Egyptian phone number (e.g., 01234567890)"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               onpaste="setTimeout(() => { this.value = this.value.replace(/[^0-9]/g, ''); }, 0)">
+                    </div>
+                    <div class="form-group">
+                        <label for="streetAddress">Street Address</label>
+                        <input type="text" id="streetAddress" name="streetAddress" required
+                               placeholder="Building number, street name, apartment"
+                               maxlength="200"
+                               title="Please enter your street address (maximum 200 characters)">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required
+                                   maxlength="100"
+                                   title="Please enter your city (maximum 100 characters)">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" required
+                                   maxlength="100"
+                                   title="Please enter your state (maximum 100 characters)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" name="country" value="Egypt" readonly
+                               maxlength="100">
+                    </div>
+                </form>
+
+                <div class="payment-method">
+                    <h4>Payment Method</h4>
+                    <div class="payment-option">
+                        <i class="far fa-money-bill-alt"></i>
+                        <div class="payment-option-text">
+                            <h5>Cash on Delivery</h5>
+                            <p>Pay when you receive your order</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="place-order-btn" id="placeOrderBtn" onclick="handlePlaceOrder()">
+                    <i class="far fa-check-circle"></i>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="cart-service.js"></script>
+    <script src="checkout-service.js"></script>
+    <script src="checkout-summary.js"></script>
+    <script>
+        let cartData = null;
+        let orderSummary = null;
+
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!cartService.isUserLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                await loadUserProfile();
+            } catch (error) {
+                showError(error.message || 'Error loading checkout data');
+            }
+        });
+
+        async function handlePlaceOrder() {
+            const button = document.getElementById('placeOrderBtn');
+            if (button.disabled) return;
+
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                // Validate all required fields
+                const requiredFields = {
+                    phone: 'Phone Number',
+                    streetAddress: 'Street Address',
+                    city: 'City',
+                    state: 'State'
+                };
+
+                const errors = [];
+                for (const [field, label] of Object.entries(requiredFields)) {
+                    const input = document.getElementById(field);
+                    if (!input || !input.value.trim()) {
+                        errors.push(`${label} is required`);
+                    }
+                }
+
+                // Validate phone format
+                const phone = document.getElementById('phone').value.trim();
+                if (phone && !/^01[0125][0-9]{8}$/.test(phone)) {
+                    errors.push('Please enter a valid Egyptian phone number (e.g., 01234567890)');
+                }
+
+                if (errors.length > 0) {
+                    showError(errors.join('\n'));
+                    button.disabled = false;
+                    button.innerHTML = '<i class="far fa-check-circle"></i> Place Order';
+                    return;
+                }
+
+                // Proceed with order placement
+                await checkoutService.placeOrder();
+            } catch (error) {
+                showError(error.message || 'Error placing order');
+                button.disabled = false;
+                button.innerHTML = '<i class="far fa-check-circle"></i> Place Order';
+            }
+        }
+
+        async function loadUserProfile() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (user && user.user) {
+                    // Load shipping addresses first
+                    const addresses = await checkoutService.fetchShippingAddresses();
+                    if (addresses && addresses.length > 0) {
+                        // Sort addresses by most recent first using database timestamps
+                        const sortedAddresses = addresses.sort((a, b) => 
+                            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+                        );
+                        const latestAddress = sortedAddresses[0];
+                        
+                        // Populate form with latest address
+                        document.getElementById('phone').value = latestAddress.phone || user.user.phone || '';
+                        document.getElementById('streetAddress').value = latestAddress.streetAddress || '';
+                        document.getElementById('city').value = latestAddress.city || '';
+                        document.getElementById('state').value = latestAddress.state || '';
+                    } else {
+                        // If no addresses found, use user's phone number if available
+                        document.getElementById('phone').value = user.user.phone || '';
+                    }
+                }
+            } catch (error) {
+                console.warn('Failed to load user profile:', error);
+                // If there's an error, still try to set the phone number from user profile
+                try {
+                    const user = JSON.parse(localStorage.getItem('currentUser'));
+                    if (user && user.user && user.user.phone) {
+                        document.getElementById('phone').value = user.user.phone;
+                    }
+                } catch (e) {
+                    console.error('Failed to load user phone number:', e);
+                }
+            }
+        }
+
+        function showError(message) {
+            const errorHtml = `
+                <div class="alert-error">
+                    <i class="far fa-times-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.querySelector('.checkout-container').insertAdjacentHTML('afterbegin', errorHtml);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

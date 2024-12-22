@@ -1,0 +1,50 @@
+/* Add styles for the user menu */
+#navbar {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+#navbar li {
+    position: relative;
+}
+
+#navbar li a {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+#navbar .login-nav {
+    display: flex;
+    align-items: center;
+}
+
+#navbar .login-nav a {
+    color: #088178;
+}
+
+#navbar .user-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 10;
+}
+
+#navbar li:hover .user-menu {
+    display: block;
+}
+
+.user-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: #1a1a1a;
+}
+
+.user-menu a:hover {
+    background: #f0f0f0;
+}

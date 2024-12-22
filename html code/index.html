@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Store - Modern Fashion Shopping</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Hero Section Styles */
+        #hero {
+            background-image: url("img/product/hero4.png");
+            height: 90vh;
+            width: 100%;
+            background-size: 100%;
+            background-position: top 25% right 0;
+            background-repeat: no-repeat;
+            padding: 0 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+        }
+
+
+        #hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        #hero h4 {
+            padding-bottom: 15px;
+            font-size: 24px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: slideRight 1s ease;
+        }
+
+        #hero h2 {
+            font-size: 56px;
+            line-height: 64px;
+            color: #fff;
+            margin: 15px 0;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideRight 1s ease 0.2s;
+        }
+
+        #hero h1 {
+            font-size: 72px;
+            color: #088178;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: slideRight 1s ease 0.4s;
+        }
+
+        #hero p {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: slideRight 1s ease 0.6s;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            animation: slideUp 1s ease 0.8s;
+        }
+
+        .hero-buttons button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background: #088178;
+            border: 2px solid #088178;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hero-buttons button:hover {
+            background: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(8, 129, 120, 0.3);
+        }
+
+        /* Featured Categories */
+        #categories {
+            padding: 80px 40px;
+            background: #f5f5f5;
+        }
+
+        #categories h2 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        #categories h2::after {
+            content: '';
+            width: 100px;
+            height: 3px;
+            background: #088178;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .category-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-box img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .category-box:hover img {
+            transform: scale(1.1);
+        }
+
+        .category-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: #fff;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .category-box:hover .category-content {
+            transform: translateY(-10px);
+        }
+
+        .category-content h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .category-content a {
+            display: inline-block;
+            padding: 10px 25px;
+            background: #088178;
+            color: #fff;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .category-content a:hover {
+            background: #066661;
+            transform: translateY(-2px);
+        }
+
+        /* Featured Products */
+        #product1 {
+            padding: 80px 40px;
+            background: #fff;
+        }
+
+        #product1 h2 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        #product1 p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .pro-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .pro {
+            background: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pro:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .pro img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pro .des {
+            padding: 10px 0;
+        }
+
+        .pro .des h5 {
+            font-size: 18px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .pro .des .star {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .pro .des h4 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #088178;
+        }
+
+        .pro button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #088178;
+            color: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .pro button:hover {
+            background: #066661;
+        }
+
+        /* Newsletter Section */
+        #newsletter {
+            background: #088178;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-radius: 6px;
+            margin: 20px;
+        }
+
+        .newtext h4 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .newtext p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .newtext p span {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .signup-btn {
+            padding: 10px 20px;
+            background: #fff;
+            color: #088178;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .signup-btn:hover {
+            background: #f8f8f8;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            #newsletter {
+                padding: 15px;
+                margin: 15px;
+                text-align: center;
+            }
+
+            .newtext h4 {
+                font-size: 18px;
+            }
+
+            .newtext p {
+                font-size: 13px;
+            }
+
+            .signup-btn {
+                width: 100%;
+                max-width: 150px;
+            }
+        }
+
+        /* Banner Section */
+        #banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("img/banner/b2.jpg");
+            background-size: cover;
+            background-position: center;
+            padding: 100px 40px;
+            text-align: center;
+            color: #fff;
+        }
+
+        #banner h4 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #banner h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+
+        #banner h2 span {
+            color: #088178;
+        }
+
+        .banner-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .banner-buttons button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #088178;
+            color: #fff;
+            border: 2px solid #088178;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .banner-buttons button:hover {
+            background: transparent;
+            color: #fff;
+        }
+
+
+        /* Loading Animation */
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .loading::after {
+            content: '';
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #088178;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #hero {
+                height: 70vh;
+                padding: 0 20px;
+                background-position: 55%;
+            }
+
+            #hero h4 {
+                font-size: 20px;
+            }
+
+            #hero h2 {
+                font-size: 40px;
+                line-height: 48px;
+            }
+
+            #hero h1 {
+                font-size: 56px;
+            }
+
+            #hero p {
+                font-size: 18px;
+            }
+
+            .category-container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .category-box img {
+                height: 300px;
+            }
+
+            .banner-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/product/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="index.html">Home</a></li>
+                <li><a href="men.html">Men</a></li>
+                <li><a href="women.html">Women</a></li>
+                <li><a href="kids.html">Kids</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="login-nav"><a href="login.html">Login</a>
+                    <div class="create-account-popup">
+                        <a href="register.html">Create Account</a>
+                    </div>
+                </li>
+                <li id="lg-bag">
+                    <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+                    <span id="cart-count" class="cart-count">0</span>
+                </li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <li><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="hero">
+        <h4>Trade-in-offer</h4>
+        <h2>Super value deals</h2>
+        <h1>On all products</h1>
+        <p>Save more with coupons & up to 70% off!</p>
+        <div class="hero-buttons">
+            <a href="men.html"><button>Shop Men</button></a>
+            <a href="women.html"><button>Shop Women</button></a>
+            <a href="kids.html"><button>Shop Kids</button></a>
+        </div>
+    </section>
+
+    <section id="feature" class="section-p1">
+        <div class="fe-box">
+            <img src="img/features/f1.png" alt="">
+            <h6>Free Shipping</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f2.png" alt="">
+            <h6>Online Order</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f3.png" alt="">
+            <h6>Save Money</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f4.png" alt="">
+            <h6>Promotions</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f5.png" alt="">
+            <h6>Happy Shopping</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f6.png" alt="">
+            <h6>24/7 Support</h6>
+        </div>
+    </section>
+
+    <section id="categories" class="section-p1">
+        <h2>Featured Categories</h2>
+        <div class="category-container">
+            <div class="category-box" onclick="window.location.href='men.html'">
+                <img src="img/product/f1.JPEG" alt="Men's Collection">
+                <div class="category-content">
+                    <h3>Men's Collection</h3>
+                    <a href="men.html">Shop Now</a>
+                </div>
+            </div>
+            <div class="category-box" onclick="window.location.href='women.html'">
+                <img src="img/product/f2.jpg" alt="Women's Collection">
+                <div class="category-content">
+                    <h3>Women's Collection</h3>
+                    <a href="women.html">Shop Now</a>
+                </div>
+            </div>
+            <div class="category-box" onclick="window.location.href='kids.html'">
+                <img src="img/product/f3.jpg" alt="Kids Collection">
+                <div class="category-content">
+                    <h3>Kids Collection</h3>
+                    <a href="kids.html">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="product1" class="section-p1">
+        <h2>Featured Products</h2>
+        <p>Summer Collection New Modern Design</p>
+        <div class="pro-container">
+            <!-- Loading animation will be shown here -->
+            <div class="loading"></div>
+        </div>
+    </section>
+
+    
+
+    <section id="newsletter" class="section-p1">
+        <div class="newtext">
+            <h4>Join Our Community</h4>
+            <p>Be part of our fashion family and enjoy <span>exclusive benefits</span></p>
+        </div>
+        <div class="newsletter-cta">
+            <a href="register.html" class="signup-btn">Create Account</a>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="img/product/logo.png" alt="">
+            <h4>Contact</h4>
+            <p><strong>Address: </strong>Port Said Street, Naga Hammadi City, Qena Governorate</p>
+            <p><strong>Phone: </strong> (+20) 01281925975 / (+20) 01559886232 </p>
+            <p><strong>Hours </strong>10:00 - 18:00 , Mon - Sat</p>
+            <div class="follow">
+                
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About Us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign In</a>
+            <a href="#">View Cart</a>
+            <a href="#">Help</a>
+        </div>
+        <div class="copyright">
+            <p>© 2024, Fashion Store - Modern Fashion Shopping</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="cart-service.js"></script>
+    <script src="script.js"></script>
+    <script>
+        async function loadFeaturedProducts() {
+            try {
+                const container = document.querySelector('.pro-container');
+                container.innerHTML = '<div class="loading"></div>';
+
+                const response = await fetch('http://localhost:5037/api/Products');
+                const products = await response.json();
+
+                const featuredProducts = products.slice(0, 8);
+
+                setTimeout(() => {
+                    container.innerHTML = featuredProducts.map(product => `
+                        <div class="pro" onclick="window.location.href='product-detail.html?id=${product.productId}'">
+                            <img src="${product.imagePath}" alt="${product.productName}">
+                            <div class="des">
+                                <h5>${product.productName}</h5>
+                                <div class="star">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <h4>$${product.price.toFixed(2)}</h4>
+                            </div>
+                            <button class="normal" onclick="event.stopPropagation(); addToCart(${product.productId})">
+                                Add to Cart
+                            </button>
+                        </div>
+                    `).join('');
+                }, 1000); // Show loading for 1 second
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.querySelector('.pro-container').innerHTML = `
+                    <div style="text-align: center; color: #666;">
+                        <p>Failed to load products. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function addToCart(productId) {
+            try {
+                await cartService.addToCart(productId);
+                showNotification('Product added to cart!');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+                color: white;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+                animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeaturedProducts();
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

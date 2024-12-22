@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المنتجات</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .product-form {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .sizes-container {
+            margin-top: 20px;
+        }
+
+        .size-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .size-row input {
+            flex: 1;
+        }
+
+        .add-size-btn {
+            background: #088178;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .remove-size-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background: #088178;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .preview-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: #088178;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/product/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a class="active" href="product-management.html">إدارة المنتجات</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section class="section-p1">
+        <h2>إضافة منتج جديد</h2>
+        <div class="product-form">
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName">اسم المنتج</label>
+                    <input type="text" id="productName" name="productName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">الوصف</label>
+                    <textarea id="description" name="description" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">السعر</label>
+                    <input type="number" id="price" name="price" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryId">الفئة</label>
+                    <select id="categoryId" name="categoryId" required>
+                        <option value="1">رجالي</option>
+                        <option value="2">حريمي</option>
+                        <option value="3">أطفال</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>المقاسات والكميات</label>
+                    <div id="sizesContainer" class="sizes-container">
+                        <div class="size-row">
+                            <input type="text" placeholder="المقاس" required>
+                            <input type="number" placeholder="الكمية" min="0" required>
+                            <button type="button" class="remove-size-btn" onclick="removeSize(this)">حذف</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-size-btn" onclick="addSize()">إضافة مقاس</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="images">الصور</label>
+                    <input type="file" id="images" name="images" multiple accept="image/*" onchange="previewImages(event)">
+                    <div id="imagePreview" class="preview-images"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">إضافة المنتج</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="product-service.js"></script>
+    <script>
+        function addSize() {
+            const container = document.getElementById('sizesContainer');
+            const row = document.createElement('div');
+            row.className = 'size-row';
+            row.innerHTML = `
+                <input type="text" placeholder="المقاس" required>
+                <input type="number" placeholder="الكمية" min="0" required>
+                <button type="button" class="remove-size-btn" onclick="removeSize(this)">حذف</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function removeSize(button) {
+            const row = button.parentElement;
+            if (document.querySelectorAll('.size-row').length > 1) {
+                row.remove();
+            }
+        }
+
+        function previewImages(event) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            const files = event.target.files;
+
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-image';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('productForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const sizeRows = document.querySelectorAll('.size-row');
+                const sizes = [];
+                const stocks = [];
+                
+                sizeRows.forEach(row => {
+                    const [sizeInput, stockInput] = row.querySelectorAll('input');
+                    sizes.push(sizeInput.value);
+                    stocks.push(parseInt(stockInput.value));
+                });
+
+                const formData = new FormData(this);
+                const images = document.getElementById('images').files;
+
+                const result = await productService.createProduct(
+                    formData.get('productName'),
+                    formData.get('description'),
+                    parseFloat(formData.get('price')),
+                    parseInt(formData.get('categoryId')),
+                    sizes,
+                    stocks,
+                    images
+                );
+
+                alert('تم إضافة المنتج بنجاح');
+                this.reset();
+                document.getElementById('imagePreview').innerHTML = '';
+            } catch (error) {
+                alert('حدث خطأ أثناء إضافة المنتج: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
